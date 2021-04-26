@@ -60,7 +60,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                //.httpBasic();
+                .httpBasic()
+                .and()
                 .formLogin()
                 .loginPage("/login")
                 //after loggin in on_success
@@ -103,6 +104,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
+    
+   
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
