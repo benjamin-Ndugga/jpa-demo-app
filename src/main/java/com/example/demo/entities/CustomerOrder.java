@@ -33,8 +33,9 @@ public class CustomerOrder implements Serializable {
     @Column(name = "orderDate", nullable = false)
     private Date orderDate;
 
-    //@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = {CascadeType.REMOVE})
-    //@JoinColumn(name = "customer_id", nullable = false, referencedColumnName = "customer_id", foreignKey = @ForeignKey(name = "customer_id_fk"))
+ 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = {CascadeType.REMOVE})
+    @JoinColumn(name = "customer_id", nullable = false, referencedColumnName = "customer_id", foreignKey = @ForeignKey(name = "customer_id_fk"))
     private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

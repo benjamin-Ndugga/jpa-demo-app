@@ -48,6 +48,9 @@ public class DemoApplication {
             customer1 = new Customer("Katherine", "Sally", 'F', "Ksally@gmail.com");
             cr.save(customer1);
 
+            customer1 = new Customer("Betty", "Resty", 'F', "bresty@gmail.com");
+            cr.save(customer1);
+
             //list of customers saved
             //cr.findAll().forEach(System.out::println);
             //lets stock up some products
