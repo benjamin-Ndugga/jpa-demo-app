@@ -64,7 +64,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
 
-        String key = "securesecuresecuresecuresecuresecuresecuresecure";
+            String key = "securesecuresecuresecuresecuresecuresecuresecuresecuresecuresecuresecuresecuresecure";
         
         String token = Jwts.builder()
                 .setSubject(authResult.getName())

@@ -1,6 +1,8 @@
 package com.example.demo.security;
 
 import com.example.demo.auth.ApplicationUserService;
+import com.example.demo.jwt.JwtTokenVerifier;
+import com.example.demo.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import static com.example.demo.security.ApplicationUserRole.*;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -39,10 +42,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        
-        
-          http
+
+        http
                 .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
+                .addFilterAfter(new JwtTokenVerifier(), JwtUsernameAndPasswordAuthenticationFilter.class)
                 //.csrf().csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
                 .antMatchers("index", "/css/*", "/js/*", "/login")
@@ -52,12 +59,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v1/products/**").hasRole(ADMIN.name())
                 .anyRequest()
                 .authenticated();
-        
-        
+
         /**
          * if using non-browsers , it is recommended to disable CSRF
          */
-
         //TO DO: read about configuring external token repository
 //        http
 //                .csrf().disable()
@@ -90,7 +95,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .invalidateHttpSession(true)
 //                .deleteCookies("JSESSIONID", "remember-me")
 //                .logoutSuccessUrl("/login");
-
     }
 
 //    @Override
@@ -115,8 +119,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
-    
-   
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
