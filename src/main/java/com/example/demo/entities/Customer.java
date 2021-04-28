@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,13 +21,33 @@ import javax.persistence.UniqueConstraint;
 )
 public class Customer implements Serializable {
 
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public int isCustomerActive() {
+        return customerActive;
+    }
+
+    public void setCustomerActive(int customerActive) {
+        this.customerActive = customerActive;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int customer_id;
+    @Column(name = "customer_id")
+    private int customerId;
     private String firstName;
     private String lastName;
     private Character gender;
     private String email;
+
+    @Column(name = "customer_active", columnDefinition = "integer default 1")
+    private int customerActive;
 
     public Customer() {
     }
@@ -47,11 +68,11 @@ public class Customer implements Serializable {
     }
 
     public Integer getCustomer_id() {
-        return customer_id;
+        return customerId;
     }
 
     public void setCustomer_id(Integer customer_id) {
-        this.customer_id = customer_id;
+        this.customerId = customer_id;
     }
 
     public String getFirstName() {
@@ -80,7 +101,7 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "Customer{" + "customer_id=" + customer_id + ", firstName=" + firstName + ", lastName=" + lastName + ", gender=" + gender + ", email=" + email + '}';
+        return "Customer{" + "customer_id=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName + ", gender=" + gender + ", email=" + email + '}';
     }
 
 }

@@ -12,11 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -43,12 +39,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /**
-         * if using non-browsers , it is recommended to disable CSRF
-         */
-
-        //TO DO: read about configuring external token repository
-        http
+        
+        
+          http
                 .csrf().disable()
                 //.csrf().csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
@@ -58,27 +51,45 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v1/customers/**").hasRole(ADMIN.name())
                 .antMatchers("/v1/products/**").hasRole(ADMIN.name())
                 .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                //after loggin in on_success
-                .defaultSuccessUrl("/home", true)
-                .and()
-                .rememberMe()
-                .tokenValiditySeconds((int) TimeUnit.MINUTES.toSeconds(1))
-                .key("somethingsecuredkey") //defaults to 2 weeks
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                //if you enable CSRF then this line should be commented
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                .clearAuthentication(true)
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID", "remember-me")
-                .logoutSuccessUrl("/login");
+                .authenticated();
+        
+        
+        /**
+         * if using non-browsers , it is recommended to disable CSRF
+         */
+
+        //TO DO: read about configuring external token repository
+//        http
+//                .csrf().disable()
+//                //.csrf().csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()).and()
+//                .authorizeRequests()
+//                .antMatchers("index", "/css/*", "/js/*", "/login")
+//                .permitAll()
+//                .antMatchers(HttpMethod.GET, "/v1/products/**").hasRole(USER.name())
+//                .antMatchers("/v1/customers/**").hasRole(ADMIN.name())
+//                .antMatchers("/v1/products/**").hasRole(ADMIN.name())
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .httpBasic()
+//                .and()
+//                    .formLogin()
+//                    .loginPage("/login")
+//                    //after loggin in on_success
+//                    .defaultSuccessUrl("/home", true)
+//                .and()
+//                .rememberMe()
+//                .tokenValiditySeconds((int) TimeUnit.MINUTES.toSeconds(1))
+//                .key("somethingsecuredkey") //defaults to 2 weeks
+//                .and()
+//                .logout()
+//                .logoutUrl("/logout")
+//                //if you enable CSRF then this line should be commented
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+//                .clearAuthentication(true)
+//                .invalidateHttpSession(true)
+//                .deleteCookies("JSESSIONID", "remember-me")
+//                .logoutSuccessUrl("/login");
 
     }
 

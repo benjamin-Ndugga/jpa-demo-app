@@ -2,7 +2,10 @@ package com.example.demo.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Date;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +48,8 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     }
 
     /**
-     * this is executed after the attempt authentication
+     * this is executed after the attempt authentication us successful on
+     * failure this is never executed
      *
      * @param request
      * @param response
@@ -55,8 +59,23 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
      * @throws ServletException
      */
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-//        Jwts.builder()
+    protected void successfulAuthentication(HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain,
+            Authentication authResult) throws IOException, ServletException {
+
+        String key = "securesecuresecuresecuresecuresecuresecuresecure";
+        
+        String token = Jwts.builder()
+                .setSubject(authResult.getName())
+                .claim("authorities", authResult.getAuthorities())
+                .setIssuedAt(new Date())
+                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(2)))
+                .signWith(Keys.hmacShaKeyFor(key.getBytes()))
+                .compact();
+       
+        response.addHeader("Authorization", "Bearer "+token);
+        
     }
 
 }

@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
@@ -33,9 +35,11 @@ public class CustomerOrder implements Serializable {
     @Column(name = "orderDate", nullable = false)
     private Date orderDate;
 
- 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = {CascadeType.REMOVE})
-    @JoinColumn(name = "customer_id", nullable = false, referencedColumnName = "customer_id", foreignKey = @ForeignKey(name = "customer_id_fk"))
+   
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JoinColumn(name = "customer_id", nullable = true, referencedColumnName = "customer_id", foreignKey = @ForeignKey(name = "customer_id_fk"))
     private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -43,6 +47,8 @@ public class CustomerOrder implements Serializable {
     private Product product;
 
     private int quantity;
+
+   
 
     public int getQuantity() {
         return quantity;
